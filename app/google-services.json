@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1094926995969",
+    "project_id": "zeesend-f99e8",
+    "storage_bucket": "zeesend-f99e8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1094926995969:android:720c85fbc7c5ebed13e600",
+        "android_client_info": {
+          "package_name": "com.tajimz.zeesend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1094926995969-k5vn6gs5jbjudsgtoo0rs0q04arccps1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tajimz.zeesend",
+            "certificate_hash": "17f8e3f4f6338585d3d641e741820e025b4e1bdb"
+          }
+        },
+        {
+          "client_id": "1094926995969-89a3hub9a77idfs1omemji83t9cfv7nc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXmKWFwaJ7xSBqJt2QJedmRWl-RAwhTnw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1094926995969-89a3hub9a77idfs1omemji83t9cfv7nc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

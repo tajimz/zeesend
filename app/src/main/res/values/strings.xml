@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">ZeeSend</string>
+    <string name="googleId">1094926995969-89a3hub9a77idfs1omemji83t9cfv7nc.apps.googleusercontent.com</string>
+    <string name="read_privacy_policy">I’ve read and agree to Zigzag’s <b><u>Privacy Policy</u></b>.</string>
+    <string name="go_log_in">Already have an account? <b><u>Log In</u></b>.</string>
+    <string name="go_sign_up">Don\'t have an account? <b><u>Sign Up</u></b>.</string>
+
+</resources>
