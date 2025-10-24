@@ -12,6 +12,7 @@ import androidx.core.view.WindowInsetsCompat;
 import com.tajimz.zeesend.auth.SignupActivity;
 import com.tajimz.zeesend.databinding.ActivitySplashBinding;
 import com.tajimz.zeesend.helper.BaseActivity;
+import com.tajimz.zeesend.helper.CONSTANTS;
 
 public class SplashActivity extends BaseActivity {
     ActivitySplashBinding binding;
@@ -22,8 +23,14 @@ public class SplashActivity extends BaseActivity {
         binding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setupEdge();
-        startActivity(new Intent(this, SignupActivity.class));
-        finish();
+        if (!getSharedPref(CONSTANTS.name).isEmpty()){
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        }else {
+            startActivity(new Intent(this, SignupActivity.class));
+            finish();
+        }
+
 
     }
     private void setupEdge(){
