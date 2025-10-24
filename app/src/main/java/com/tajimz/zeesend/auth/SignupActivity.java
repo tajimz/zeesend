@@ -1,6 +1,7 @@
 package com.tajimz.zeesend.auth;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Patterns;
@@ -10,6 +11,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.tajimz.zeesend.MainActivity;
 import com.tajimz.zeesend.R;
 import com.tajimz.zeesend.databinding.ActivitySignupBinding;
 import com.tajimz.zeesend.helper.BaseActivity;
@@ -24,6 +26,9 @@ import androidx.credentials.Credential;
 import androidx.credentials.exceptions.GetCredentialException;
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
 import com.google.firebase.auth.FirebaseAuth;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class SignupActivity extends BaseActivity {
     private ActivitySignupBinding binding;
@@ -40,7 +45,9 @@ public class SignupActivity extends BaseActivity {
         binding = ActivitySignupBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setupEdge();
+        handleCreate();
         handleGoogle();
+        handleLinks();
 
 
 
@@ -60,6 +67,83 @@ public class SignupActivity extends BaseActivity {
         googleOption = new GetSignInWithGoogleOption.Builder(getString(R.string.googleId)).build();
         getCredentialRequest = new GetCredentialRequest.Builder().addCredentialOption(googleOption).build();
 
+    }
+
+
+    private void handleCreate(){
+        binding.btnCreate.setOnClickListener(v->{
+
+            if (!isValidInput()){
+                return;
+            }
+
+            JSONObject jsonObject = new JSONObject();
+            try {
+                String username = generateUniqueId(this);
+                jsonObject.put(CONSTANTS.name, name);
+                jsonObject.put(CONSTANTS.email, email);
+                jsonObject.put(CONSTANTS.password, pass);
+                jsonObject.put(CONSTANTS.username, username);
+
+                Log.d("tustus", jsonObject.toString());
+
+                requestObj(false, CONSTANTS.appUrl + "auth/signup.php", jsonObject, new ObjListener() {
+                    @Override
+                    public void onSuccess(JSONObject result) {
+                        try {
+                            String status = result.getString("status");
+                            if ("done".equals(status)) doneSignup(name, email, username);
+                            else toast(status);
+                        } catch (JSONException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                });
+
+
+
+
+
+
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+
+
+        });
+    }
+    private void handleGoogle(){
+        binding.tvVerify.setOnClickListener(v->{
+            email = gettext(binding.edMail);
+            if (email.isEmpty() || "verified".equals(binding.tvVerify.getText().toString())) return;
+
+
+
+
+
+            credentialManager.getCredentialAsync(this, getCredentialRequest, null, Runnable::run, new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {
+                @Override
+                public void onResult(GetCredentialResponse getCredentialResponse) {
+
+                    Credential credential = getCredentialResponse.getCredential();
+                    GoogleIdTokenCredential googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.getData());
+                    String emailG = googleIdTokenCredential.getId();
+                    runOnUiThread(()->{
+                        if (email.equals(emailG)) binding.tvVerify.setText("verified");
+                        else toast("Please select the email you have entered");
+                    });
+
+
+
+
+                }
+
+                @Override
+                public void onError(@NonNull GetCredentialException e) {
+                    Log.d("tustus",e.getMessage().toString());
+                }
+            });
+        });
     }
 
     private boolean isValidInput(){
@@ -115,28 +199,35 @@ public class SignupActivity extends BaseActivity {
 
     }
 
-    private void handleGoogle(){
-        binding.tvVerify.setOnClickListener(v->{
-            credentialManager.getCredentialAsync(this, getCredentialRequest, null, Runnable::run, new CredentialManagerCallback<GetCredentialResponse, GetCredentialException>() {
-                @Override
-                public void onResult(GetCredentialResponse getCredentialResponse) {
+    private void handleLinks(){
+        //redirect to privacy policy
 
-                    Credential credential = getCredentialResponse.getCredential();
-                    GoogleIdTokenCredential googleIdTokenCredential = GoogleIdTokenCredential.createFrom(credential.getData());
-                    Log.d("tustus","heree");
-                    String email = googleIdTokenCredential.getId();
-                    Log.d("tustus",email);
-
-
-                }
-
-                @Override
-                public void onError(@NonNull GetCredentialException e) {
-                    Log.d("tustus",e.getMessage().toString());
-                }
-            });
+        binding.tvLogin.setOnClickListener(v->{
+            startActivity(new Intent(this, LoginActivity.class));
         });
     }
+
+
+    private void doneSignup(String name, String email, String username){
+        String bio = CONSTANTS.defaultBio;
+        String image = CONSTANTS.defaultImage;
+
+        editSharedPref(CONSTANTS.bio, bio);
+        editSharedPref(CONSTANTS.image, image);
+        editSharedPref(CONSTANTS.name, name);
+        editSharedPref(CONSTANTS.email, email);
+        editSharedPref(CONSTANTS.username, username);
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+
+
+
+
+
+    }
+
 
 
 

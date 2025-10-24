@@ -1,6 +1,8 @@
 package com.tajimz.zeesend.helper;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -21,6 +23,20 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class BaseActivity extends AppCompatActivity {
+
+
+    protected String getSharedPref(String keyword) {
+        SharedPreferences sharedPreferences = getSharedPreferences(CONSTANTS.SHAREDPREF, MODE_PRIVATE);
+        return sharedPreferences.getString(keyword, null);
+    }
+
+    protected void editSharedPref(String keyword, String value) {
+        SharedPreferences sharedPreferences = getSharedPreferences(CONSTANTS.SHAREDPREF, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(keyword, value);
+        editor.apply();
+    }
+
 
     public interface ObjListener{
         void onSuccess(JSONObject result);
@@ -116,6 +132,24 @@ public class BaseActivity extends AppCompatActivity {
         new AlertDialog.Builder(this).setTitle("Error occurred").setMessage(message).setNeutralButton("Understand", null).show();
 
     }
+
+    public static String generateUniqueId(Context context) {
+        String androidId = android.provider.Settings.Secure.getString(
+                context.getContentResolver(),
+                android.provider.Settings.Secure.ANDROID_ID
+        );
+
+        long time = System.currentTimeMillis();
+
+        String base = androidId + time;
+
+        long hash = Math.abs(base.hashCode());
+
+        return String.format("%010d", hash % 1_000_000_0000L);
+    }
+
+
+
 
 
 }
