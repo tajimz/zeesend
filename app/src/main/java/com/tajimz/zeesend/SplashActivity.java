@@ -4,6 +4,9 @@ package com.tajimz.zeesend;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+
 import androidx.activity.EdgeToEdge;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -23,13 +26,8 @@ public class SplashActivity extends BaseActivity {
         binding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         setupEdge();
-        if (!getSharedPref(CONSTANTS.name).isEmpty()){
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-        }else {
-            startActivity(new Intent(this, SignupActivity.class));
-            finish();
-        }
+        new Handler(Looper.getMainLooper()).postDelayed(this::navigateNext, 2000);
+
 
 
     }
@@ -44,5 +42,14 @@ public class SplashActivity extends BaseActivity {
 
 
 
+    }
+
+    private void navigateNext(){
+        String name = getSharedPref(CONSTANTS.name);
+        if (name != null) {
+            startActivity(new Intent(SplashActivity.this, MainActivity.class)); finish();
+        }else {
+            startActivity(new Intent(SplashActivity.this, SignupActivity.class)); finish();
+        }
     }
 }
