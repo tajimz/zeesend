@@ -30,6 +30,209 @@
 
         />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.7dp"
+        android:background="@color/blackLight"
+        app:layout_constraintTop_toBottomOf="@id/imgMore"
+        android:layout_marginTop="10dp"/>
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/image"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:civ_border_width="0.5dp"
+        app:civ_border_color="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:src="@drawable/logo"
+        app:layout_constraintTop_toBottomOf="@+id/imgMore"
+        android:layout_marginTop="50dp"
+        />
+
+    <RelativeLayout
+        android:id="@+id/rl1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/btnSend"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        >
+        <ImageView
+            android:id="@+id/img1"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/baseline_person"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"/>
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            android:layout_toRightOf="@id/img1"
+            android:textSize="17dp"/>
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TR Tajim"
+            android:layout_toRightOf="@id/img1"
+            android:layout_below="@id/tv1"
+            android:textSize="15sp"/>
+
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl2"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/rl1"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        >
+        <ImageView
+            android:id="@+id/img2"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/baseline_circle"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"/>
+        <TextView
+            android:id="@+id/tv2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="About"
+            android:layout_toRightOf="@id/img2"
+            android:textSize="17dp"/>
+        <TextView
+            android:id="@+id/tvBio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Life's better with shaders on!"
+            android:layout_toRightOf="@id/img2"
+            android:layout_below="@id/tv2"
+            android:textSize="15sp"/>
+
+
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl3"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/rl2"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+
+        >
+        <ImageView
+            android:id="@+id/img3"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/baseline_email"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"/>
+        <TextView
+            android:id="@+id/tv3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email"
+            android:layout_toRightOf="@id/img3"
+            android:textSize="17dp"/>
+        <TextView
+            android:id="@+id/tvEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="com.tajim@gmail.com"
+            android:layout_toRightOf="@id/img3"
+            android:layout_below="@id/tv3"
+            android:textSize="15sp"/>
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl4"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/rl3"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+
+        >
+        <ImageView
+            android:id="@+id/img4"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/baseline_telephone"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"/>
+        <TextView
+            android:id="@+id/tv4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:layout_toRightOf="@id/img4"
+            android:textSize="17dp"/>
+        <TextView
+            android:id="@+id/tvUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="tajimz"
+            android:layout_toRightOf="@id/img4"
+            android:layout_below="@id/tv4"
+            android:textSize="15sp"/>
+
+
+    </RelativeLayout>
+
+
+<!--    <TextView-->
+<!--        android:id="@+id/tvName"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="TR Tajim"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/image"-->
+<!--        android:gravity="center"-->
+<!--        android:textSize="25sp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:textStyle="bold"/>-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/tvEmail"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="com.tajim@gmail.com"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/tvName"-->
+<!--        android:gravity="center"-->
+<!--        android:textSize="20sp"-->
+<!--        android:layout_marginTop="10dp"/>-->
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send Message"
+        app:cornerRadius="5dp"
+        android:backgroundTint="@color/themePrimary"
+        app:layout_constraintTop_toBottomOf="@id/image"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp"
+        app:icon="@drawable/baseline_chats"
+
+        />
+
+
+
+
+
+
+
+
 
 
 
