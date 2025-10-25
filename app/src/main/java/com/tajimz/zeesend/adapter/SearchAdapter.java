@@ -1,6 +1,7 @@
 package com.tajimz.zeesend.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
+import com.tajimz.zeesend.ContainerActivity;
 import com.tajimz.zeesend.databinding.LayoutRPeopleBinding;
 import com.tajimz.zeesend.helper.CONSTANTS;
 
@@ -57,10 +59,24 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             String email = jsonObject.getString(CONSTANTS.email);
             String bio = jsonObject.getString(CONSTANTS.bio);
             String image = jsonObject.getString(CONSTANTS.image);
+            String id = jsonObject.getString(CONSTANTS.id);
 
             holder.binding.tvName.setText(name);
             holder.binding.tvUsername.setText(username);
             Picasso.get().load(image).into(holder.binding.profileImage);
+
+            holder.binding.main.setOnClickListener(v->{
+                Intent intent = new Intent(context, ContainerActivity.class);
+                intent.putExtra("status", "profile");
+                intent.putExtra(CONSTANTS.name, name);
+                intent.putExtra(CONSTANTS.username, username);
+                intent.putExtra(CONSTANTS.email, email);
+                intent.putExtra(CONSTANTS.bio, bio);
+                intent.putExtra(CONSTANTS.image, image);
+                intent.putExtra(CONSTANTS.id, id);
+                context.startActivity(intent);
+
+            });
 
 
 

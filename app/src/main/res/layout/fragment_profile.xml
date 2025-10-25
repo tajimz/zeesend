@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".tab.ProfileFragment">
+    tools:context=".tab.ProfileFragment"
+    android:padding="10dp">
 
     <TextView
         android:id="@+id/tvTitle"
@@ -189,27 +190,6 @@
 
     </RelativeLayout>
 
-
-<!--    <TextView-->
-<!--        android:id="@+id/tvName"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="TR Tajim"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/image"-->
-<!--        android:gravity="center"-->
-<!--        android:textSize="25sp"-->
-<!--        android:layout_marginTop="10dp"-->
-<!--        android:textStyle="bold"/>-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/tvEmail"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="com.tajim@gmail.com"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/tvName"-->
-<!--        android:gravity="center"-->
-<!--        android:textSize="20sp"-->
-<!--        android:layout_marginTop="10dp"/>-->
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSend"

@@ -13,6 +13,9 @@
         android:theme="@style/Theme.ZeeSend"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ContainerActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="false" />
         <activity
