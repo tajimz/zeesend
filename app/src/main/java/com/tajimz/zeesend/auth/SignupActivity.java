@@ -92,8 +92,13 @@ public class SignupActivity extends BaseActivity {
                     public void onSuccess(JSONObject result) {
                         try {
                             String status = result.getString("status");
-                            if ("done".equals(status)) doneSignup(name, email, username);
-                            else toast(status);
+                            if ("done".equals(status)) {
+                                String id = result.getString(CONSTANTS.id);
+                                doneSignup(name, email, username, id);
+                            }
+                            else {
+                                toast(status);
+                            }
                         } catch (JSONException e) {
                             throw new RuntimeException(e);
                         }
@@ -208,7 +213,7 @@ public class SignupActivity extends BaseActivity {
     }
 
 
-    private void doneSignup(String name, String email, String username){
+    private void doneSignup(String name, String email, String username, String id){
         String bio = CONSTANTS.defaultBio;
         String image = CONSTANTS.defaultImage;
 
@@ -217,6 +222,7 @@ public class SignupActivity extends BaseActivity {
         editSharedPref(CONSTANTS.name, name);
         editSharedPref(CONSTANTS.email, email);
         editSharedPref(CONSTANTS.username, username);
+        editSharedPref(CONSTANTS.id, id);
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

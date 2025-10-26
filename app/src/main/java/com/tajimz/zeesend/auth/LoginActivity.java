@@ -130,8 +130,9 @@ public class LoginActivity extends BaseActivity {
                         String username = result.getString(CONSTANTS.username);
                         String bio = result.getString(CONSTANTS.bio);
                         String image = result.getString(CONSTANTS.image);
+                        String id = result.getString(CONSTANTS.id);
 
-                        doneLogin(name, email, username, bio, image);
+                        doneLogin(name, email, username, bio, image, id);
                     } catch (JSONException e) {
                         throw new RuntimeException(e);
                     }
@@ -157,13 +158,14 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    private void doneLogin(String name, String email, String username , String bio, String image){
+    private void doneLogin(String name, String email, String username , String bio, String image, String id){
 
         editSharedPref(CONSTANTS.bio, bio);
         editSharedPref(CONSTANTS.image, image);
         editSharedPref(CONSTANTS.name, name);
         editSharedPref(CONSTANTS.email, email);
         editSharedPref(CONSTANTS.username, username);
+        editSharedPref(CONSTANTS.id, id);
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

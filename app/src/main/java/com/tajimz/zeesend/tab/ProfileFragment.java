@@ -3,6 +3,7 @@ package com.tajimz.zeesend.tab;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.squareup.picasso.Picasso;
+import com.tajimz.zeesend.ChatActivity;
 import com.tajimz.zeesend.R;
 import com.tajimz.zeesend.databinding.FragmentProfileBinding;
 import com.tajimz.zeesend.helper.BaseFragment;
@@ -28,6 +30,7 @@ public class ProfileFragment extends BaseFragment {
         binding = FragmentProfileBinding.inflate(inflater, container, false);
 
         setupTextViews();
+        setupClickListeners();
 
 
         return binding.getRoot();
@@ -57,5 +60,15 @@ public class ProfileFragment extends BaseFragment {
         binding.tvEmail.setText(email);
         Picasso.get().load(image).into(binding.image);
 
+    }
+
+    private void setupClickListeners(){
+        binding.btnSend.setOnClickListener(v->{
+            Intent intent = new Intent(getContext(), ChatActivity.class);
+            intent.putExtra(CONSTANTS.name, name);
+            intent.putExtra(CONSTANTS.id, id);
+            intent.putExtra(CONSTANTS.image, image);
+            startActivity(intent);
+        });
     }
 }
