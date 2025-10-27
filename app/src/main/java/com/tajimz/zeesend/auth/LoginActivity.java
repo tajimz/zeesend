@@ -4,18 +4,15 @@ package com.tajimz.zeesend.auth;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
 import com.tajimz.zeesend.MainActivity;
 import com.tajimz.zeesend.R;
 import com.tajimz.zeesend.databinding.ActivityLoginBinding;
 import com.tajimz.zeesend.helper.BaseActivity;
-
 import androidx.credentials.CredentialManager;
 import com.google.android.libraries.identity.googleid.GetSignInWithGoogleOption;
 import androidx.credentials.CredentialManagerCallback;
@@ -26,9 +23,6 @@ import androidx.credentials.exceptions.GetCredentialException;
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.tajimz.zeesend.helper.CONSTANTS;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LoginActivity extends BaseActivity {
@@ -109,39 +103,35 @@ public class LoginActivity extends BaseActivity {
 
     private void requestServer(String email, String via, String pass){
         JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put(CONSTANTS.email, email);
-            jsonObject.put(CONSTANTS.password, pass);
-            jsonObject.put("via", via);
+
+        putInJsonObj(jsonObject, CONSTANTS.email, email);
+        putInJsonObj(jsonObject, CONSTANTS.password, pass);
+        putInJsonObj(jsonObject, "via", via);
 
 
-            requestObj(false, CONSTANTS.appUrl + "auth/login.php", jsonObject, new ObjListener() {
-                @Override
-                public void onSuccess(JSONObject result) {
-                    Log.d("tustus", result.toString());
-                    try {
-                        String status = result.getString("status");
-                        if (!"done".equals(status)){
-                            toast(status);
-                            return;
-                        }
-                        String name = result.getString(CONSTANTS.name);
-                        String email = result.getString(CONSTANTS.email);
-                        String username = result.getString(CONSTANTS.username);
-                        String bio = result.getString(CONSTANTS.bio);
-                        String image = result.getString(CONSTANTS.image);
-                        String id = result.getString(CONSTANTS.id);
+        requestObj(false, CONSTANTS.appUrl + "auth/login.php", jsonObject, new ObjListener() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                Log.d("tustus", result.toString());
 
-                        doneLogin(name, email, username, bio, image, id);
-                    } catch (JSONException e) {
-                        throw new RuntimeException(e);
-                    }
+                String status = getStrFromJsonObj(result, "status");
+                if (!"done".equals(status)){
+                    toast(status);
+                    return;
                 }
-            });
+                String name = getStrFromJsonObj(result, CONSTANTS.name);
+                String email = getStrFromJsonObj(result, CONSTANTS.email);
+                String username = getStrFromJsonObj(result, CONSTANTS.username);
+                String bio = getStrFromJsonObj(result, CONSTANTS.bio);
+                String image = getStrFromJsonObj(result, CONSTANTS.image);
+                String id = getStrFromJsonObj(result, CONSTANTS.id);
 
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
+                doneLogin(name, email, username, bio, image, id);
+
+            }
+        });
+
+
 
 
     }

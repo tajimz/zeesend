@@ -169,6 +169,24 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
+    protected void putInJsonObj(JSONObject jsonObject, String key, Object value){
+        try {
+            jsonObject.put(key, value);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    protected String getStrFromJsonObj(JSONObject jsonObject, String key){
+
+        try {
+            return jsonObject.getString(key);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 
 

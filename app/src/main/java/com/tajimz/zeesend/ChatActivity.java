@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -16,13 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.squareup.picasso.Picasso;
 import com.tajimz.zeesend.adapter.ChatAdapter;
-import com.tajimz.zeesend.adapter.SearchAdapter;
 import com.tajimz.zeesend.databinding.ActivityChatBinding;
 import com.tajimz.zeesend.helper.BaseActivity;
 import com.tajimz.zeesend.helper.CONSTANTS;
-
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 public class ChatActivity extends BaseActivity {
@@ -69,20 +65,15 @@ public class ChatActivity extends BaseActivity {
 
     private void findRoom(){
         currentUserId = getSharedPref(CONSTANTS.id);
-
         JSONObject jsonObject = new JSONObject();
-        try {
-        if (Integer.parseInt(id) > Integer.parseInt(currentUserId)){
 
-                jsonObject.put("user1", currentUserId);
-                jsonObject.put("user2", id);
+        if (Integer.parseInt(id) > Integer.parseInt(currentUserId)){
+            putInJsonObj(jsonObject, "user1", currentUserId);
+            putInJsonObj(jsonObject, "user2", id);
 
         }else {
-            jsonObject.put("user1", id);
-            jsonObject.put("user2", currentUserId );
-        }
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
+            putInJsonObj(jsonObject, "user1", id);
+            putInJsonObj(jsonObject, "user2", currentUserId );
         }
 
 
@@ -91,13 +82,10 @@ public class ChatActivity extends BaseActivity {
             @Override
             public void onSuccess(JSONObject result) {
                 Log.d("tustus", result.toString());
-                try {
-                     roomId = result.getString("room_id");
-                    getMessagesAll(false, roomId);
+                roomId = getStrFromJsonObj(result, "room_id");
+                getMessagesAll(false, roomId);
 
-                } catch (JSONException e) {
-                    throw new RuntimeException(e);
-                }
+
             }
         });
 
@@ -119,34 +107,64 @@ public class ChatActivity extends BaseActivity {
 
     private void handleSend(){
         binding.btnSend.setOnClickListener(v->{
+
             String text = gettext(binding.edMessage);
             if (text.isEmpty()) return;
             JSONObject jsonObject = new JSONObject();
-            try {
-                jsonObject.put("sender_id", currentUserId);
-                jsonObject.put("room_id", roomId);
-                jsonObject.put("message", text.trim());
 
-                binding.tvSend.setText("Sending : "+text);
-                binding.tvSend.setVisibility(VISIBLE);
-                binding.edMessage.setText("");
-                requestObj(true, CONSTANTS.appUrl + "chats/sendMessage.php", jsonObject, new ObjListener() {
-                    @Override
-                    public void onSuccess(JSONObject result) {
-                        Log.d("tustus", result.toString());
-                        binding.tvSend.setVisibility(GONE);
-                        getMessagesAll(true, roomId);
+            putInJsonObj(jsonObject, "sender_id", currentUserId);
+            putInJsonObj(jsonObject, "room_id", roomId);
+            putInJsonObj(jsonObject, "message", text.trim());
 
-                    }
-                });
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
+            binding.tvSend.setText("Sending : "+text);
+            binding.tvSend.setVisibility(VISIBLE);
+            binding.edMessage.setText("");
+
+            requestObj(true, CONSTANTS.appUrl + "chats/sendMessage.php", jsonObject, new ObjListener() {
+                @Override
+                public void onSuccess(JSONObject result) {
+                    Log.d("tustus", result.toString());
+                    binding.tvSend.setVisibility(GONE);
+                    getMessagesAll(true, roomId);
+
+                }
+            });
+
         });
 
         binding.imgMore.setOnClickListener(v->{
             getMessagesAll(true, roomId);
         });
+    }
+
+    private void getMessagesAll(Boolean onlyNew, String roomId){
+
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
+
+        putInJsonObj(jsonObject, "room_id", roomId);
+        putInJsonObj(jsonObject, "last_updated", lastMessage);
+
+        if (onlyNew) putInJsonObj(jsonObject, "only_new", "1");
+        else putInJsonObj(jsonObject, "only_new", "0");
+
+        jsonArray.put(jsonObject);
+
+        requestArray(true, CONSTANTS.appUrl + "chats/getMessages.php", jsonArray, new ArrayListener() {
+            @Override
+            public void onSuccess(JSONArray result) {
+                Log.d("tustus", result.toString());
+                if (onlyNew) chatAdapter.addData(result);
+                else handleRecycler(result, currentUserId);
+                lastMessage = getLastMessageTime(result, lastMessage) ;
+                binding.recyclerChat.scrollToPosition(chatAdapter.getItemCount() - 1);
+
+
+            }
+        });
+
+
+
     }
 
     private Handler handler = new Handler();
@@ -167,35 +185,9 @@ public class ChatActivity extends BaseActivity {
 
 
 
-    private void getMessagesAll(Boolean onlyNew, String roomId){
-
-        JSONArray jsonArray = new JSONArray();
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("room_id", roomId);
-            jsonObject.put("last_updated", lastMessage);
-            if (onlyNew) jsonObject.put("only_new", "1");
-            else jsonObject.put("only_new", "0");
-            jsonArray.put(jsonObject);
-
-            requestArray(true, CONSTANTS.appUrl + "chats/getMessages.php", jsonArray, new ArrayListener() {
-                @Override
-                public void onSuccess(JSONArray result) {
-                    Log.d("tustus", result.toString());
-                    if (onlyNew) chatAdapter.addData(result);
-                    else handleRecycler(result, currentUserId);
-                    lastMessage = getLastMessageTime(result, lastMessage) ;
-                    binding.recyclerChat.scrollToPosition(chatAdapter.getItemCount() - 1);
 
 
-                }
-            });
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
 
-
-    }
 
 
 

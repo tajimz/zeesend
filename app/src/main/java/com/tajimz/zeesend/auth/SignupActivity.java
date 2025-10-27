@@ -73,46 +73,44 @@ public class SignupActivity extends BaseActivity {
     private void handleCreate(){
         binding.btnCreate.setOnClickListener(v->{
 
+
             if (!isValidInput()){
                 return;
             }
 
+
             JSONObject jsonObject = new JSONObject();
-            try {
-                String username = generateUniqueId(this);
-                jsonObject.put(CONSTANTS.name, name);
-                jsonObject.put(CONSTANTS.email, email);
-                jsonObject.put(CONSTANTS.password, pass);
-                jsonObject.put(CONSTANTS.username, username);
 
-                Log.d("tustus", jsonObject.toString());
+            String username = generateUniqueId(this);
+            putInJsonObj(jsonObject, CONSTANTS.name, name);
+            putInJsonObj(jsonObject, CONSTANTS.email, email);
+            putInJsonObj(jsonObject ,CONSTANTS.password, pass);
+            putInJsonObj(jsonObject, CONSTANTS.username, username);
 
-                requestObj(false, CONSTANTS.appUrl + "auth/signup.php", jsonObject, new ObjListener() {
-                    @Override
-                    public void onSuccess(JSONObject result) {
-                        try {
-                            String status = result.getString("status");
-                            if ("done".equals(status)) {
-                                String id = result.getString(CONSTANTS.id);
-                                doneSignup(name, email, username, id);
-                            }
-                            else {
-                                toast(status);
-                            }
-                        } catch (JSONException e) {
-                            throw new RuntimeException(e);
-                        }
+            Log.d("tustus", jsonObject.toString());
+
+            requestObj(false, CONSTANTS.appUrl + "auth/signup.php", jsonObject, new ObjListener() {
+                @Override
+                public void onSuccess(JSONObject result) {
+
+                    String status = getStrFromJsonObj(result ,"status");
+                    if ("done".equals(status)) {
+                        String id = getStrFromJsonObj(result, CONSTANTS.id);
+                        doneSignup(name, email, username, id);
                     }
-                });
+                    else {
+                        toast(status);
+                    }
+
+                }
+            });
 
 
 
 
 
 
-            } catch (JSONException e) {
-                throw new RuntimeException(e);
-            }
+
 
 
         });
