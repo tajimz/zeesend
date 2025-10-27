@@ -93,7 +93,7 @@ public class ChatActivity extends BaseActivity {
                 Log.d("tustus", result.toString());
                 try {
                      roomId = result.getString("room_id");
-                    getMessagesAll(roomId);
+                    getMessagesAll(false, roomId);
 
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
@@ -104,31 +104,7 @@ public class ChatActivity extends BaseActivity {
 
     }
 
-    private void getMessagesAll(String roomId){
 
-        JSONArray jsonArray = new JSONArray();
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("room_id", roomId);
-            jsonArray.put(jsonObject);
-
-            requestArray(true, CONSTANTS.appUrl + "chats/getMessages.php", jsonArray, new ArrayListener() {
-                @Override
-                public void onSuccess(JSONArray result) {
-                    Log.d("tustus", result.toString());
-                    handleRecycler(result, currentUserId);
-                    lastMessage = getLastMessageTime(result, lastMessage) ;
-                    binding.recyclerChat.scrollToPosition(chatAdapter.getItemCount() - 1);
-
-
-                }
-            });
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
-
-
-    }
 
     private void handleRecycler(JSONArray jsonArray, String currentId){
         if (chatAdapter == null) {
@@ -159,7 +135,7 @@ public class ChatActivity extends BaseActivity {
                     public void onSuccess(JSONObject result) {
                         Log.d("tustus", result.toString());
                         binding.tvSend.setVisibility(GONE);
-                        getNewMessages(roomId, lastMessage);
+                        getMessagesAll(true, roomId);
 
                     }
                 });
@@ -169,7 +145,7 @@ public class ChatActivity extends BaseActivity {
         });
 
         binding.imgMore.setOnClickListener(v->{
-            getNewMessages(roomId, lastMessage);
+            getMessagesAll(true, roomId);
         });
     }
 
@@ -181,7 +157,7 @@ public class ChatActivity extends BaseActivity {
             @Override
             public void run() {
                 if (roomId != null) {
-                    getNewMessages(roomId, lastMessage); // call your method
+                    getMessagesAll(true, roomId); // call your method
                 }
                 handler.postDelayed(this, 3000); // repeat every 5 seconds
             }
@@ -189,24 +165,26 @@ public class ChatActivity extends BaseActivity {
         handler.post(runnable);
     }
 
-    private void getNewMessages(String roomId, String lastUpdatedDate){
+
+
+    private void getMessagesAll(Boolean onlyNew, String roomId){
 
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("room_id", roomId);
-            jsonObject.put("last_updated", lastUpdatedDate);
+            jsonObject.put("last_updated", lastMessage);
+            if (onlyNew) jsonObject.put("only_new", "1");
+            else jsonObject.put("only_new", "0");
             jsonArray.put(jsonObject);
 
-            requestArray(true, CONSTANTS.appUrl + "chats/getMessagesNew.php", jsonArray, new ArrayListener() {
+            requestArray(true, CONSTANTS.appUrl + "chats/getMessages.php", jsonArray, new ArrayListener() {
                 @Override
                 public void onSuccess(JSONArray result) {
-                    Log.d("tustusR", result.toString());
-                    Log.d("tustusR", lastMessage);
-
-                    chatAdapter.addData(result);
-                    lastMessage = getLastMessageTime(result,lastMessage ) ;
-
+                    Log.d("tustus", result.toString());
+                    if (onlyNew) chatAdapter.addData(result);
+                    else handleRecycler(result, currentUserId);
+                    lastMessage = getLastMessageTime(result, lastMessage) ;
                     binding.recyclerChat.scrollToPosition(chatAdapter.getItemCount() - 1);
 
 
