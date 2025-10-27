@@ -20,7 +20,12 @@ import com.android.volley.toolbox.Volley;
 import com.tajimz.zeesend.R;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -133,7 +138,7 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
-    public static String generateUniqueId(Context context) {
+    protected static String generateUniqueId(Context context) {
         String androidId = android.provider.Settings.Secure.getString(
                 context.getContentResolver(),
                 android.provider.Settings.Secure.ANDROID_ID
@@ -147,6 +152,23 @@ public class BaseActivity extends AppCompatActivity {
 
         return String.format("%010d", hash % 1_000_000_0000L);
     }
+
+    protected String getLastMessageTime(JSONArray jsonArray, String defaultValue){
+        String time;
+        if (jsonArray.length() == 0){
+            return defaultValue;
+        }
+        try {
+            JSONObject jsonObject = jsonArray.getJSONObject(jsonArray.length() - 1);
+            time = jsonObject.getString("message_time");
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+        return time;
+
+    }
+
 
 
 

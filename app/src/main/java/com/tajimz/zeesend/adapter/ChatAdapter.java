@@ -1,5 +1,8 @@
 package com.tajimz.zeesend.adapter;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -8,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.tajimz.zeesend.databinding.LayoutChatBinding;
+import com.tajimz.zeesend.helper.CONSTANTS;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,7 +20,6 @@ import org.json.JSONObject;
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolderChat> {
     Context context;
     JSONArray jsonArray;
-    JSONObject jsonObject;
     String userId;
 
     public ChatAdapter(Context context, String userId, JSONArray jsonArray){
@@ -44,16 +47,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolderChat
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderChat holder, int position) {
-        jsonObject = new JSONObject();
         try {
-            jsonObject = (JSONObject) jsonArray.get(position);
+            JSONObject jsonObject = (JSONObject) jsonArray.get(position);
             String message = jsonObject.getString("message");
-            String senderId = jsonObject.getString("senderId");
+            String senderId = jsonObject.getString(CONSTANTS.sender_id);
 
             if (userId.equals(senderId)) {
                 holder.binding.tvMe.setText(message);
+                holder.binding.tvHe.setVisibility(GONE);
+                holder.binding.tvMe.setVisibility(VISIBLE);
             } else {
                 holder.binding.tvHe.setText(message);
+                holder.binding.tvMe.setVisibility(GONE);
+                holder.binding.tvHe.setVisibility(VISIBLE);
             }
 
         } catch (JSONException e) {
@@ -69,5 +75,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolderChat
     public void updateData(JSONArray newArray) {
         this.jsonArray = newArray;
         notifyDataSetChanged();
+
+    }
+
+    public void addData(JSONArray jsonArray1){
+        int start = jsonArray.length();
+        for (int i = 0 ; i < jsonArray1.length(); i ++){
+            try {
+                jsonArray.put(jsonArray1.get(i));
+            } catch (JSONException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+        notifyItemRangeInserted(start, jsonArray1.length());
     }
 }

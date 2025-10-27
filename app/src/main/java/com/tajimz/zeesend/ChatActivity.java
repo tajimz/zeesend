@@ -4,6 +4,7 @@ import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
@@ -28,6 +29,7 @@ public class ChatActivity extends BaseActivity {
     ActivityChatBinding binding;
     String id, name, image, currentUserId, roomId;
     ChatAdapter chatAdapter;
+    String lastMessage ;
 
 
     @Override
@@ -39,6 +41,7 @@ public class ChatActivity extends BaseActivity {
         setupTexts();
         findRoom();
         handleSend();
+        startLooping();
 
 
 
@@ -87,10 +90,11 @@ public class ChatActivity extends BaseActivity {
         requestObj(true, CONSTANTS.appUrl + "chats/findRoom.php", jsonObject, new ObjListener() {
             @Override
             public void onSuccess(JSONObject result) {
+                Log.d("tustus", result.toString());
                 try {
                      roomId = result.getString("room_id");
-                    getMessages(roomId);
-                    Log.d("tustus", roomId);
+                    getMessagesAll(roomId);
+
                 } catch (JSONException e) {
                     throw new RuntimeException(e);
                 }
@@ -100,7 +104,7 @@ public class ChatActivity extends BaseActivity {
 
     }
 
-    private void getMessages(String roomId){
+    private void getMessagesAll(String roomId){
 
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();
@@ -113,6 +117,8 @@ public class ChatActivity extends BaseActivity {
                 public void onSuccess(JSONArray result) {
                     Log.d("tustus", result.toString());
                     handleRecycler(result, currentUserId);
+                    lastMessage = getLastMessageTime(result, lastMessage) ;
+                    binding.recyclerChat.scrollToPosition(chatAdapter.getItemCount() - 1);
 
 
                 }
@@ -126,8 +132,8 @@ public class ChatActivity extends BaseActivity {
 
     private void handleRecycler(JSONArray jsonArray, String currentId){
         if (chatAdapter == null) {
-            binding.recyclerChat.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-            chatAdapter = new ChatAdapter(getApplicationContext(), currentId, jsonArray);
+            binding.recyclerChat.setLayoutManager(new LinearLayoutManager(ChatActivity.this));
+            chatAdapter = new ChatAdapter(ChatActivity.this, currentId, jsonArray);
             binding.recyclerChat.setAdapter(chatAdapter);
         } else {
             chatAdapter.updateData(jsonArray);
@@ -143,7 +149,7 @@ public class ChatActivity extends BaseActivity {
             try {
                 jsonObject.put("sender_id", currentUserId);
                 jsonObject.put("room_id", roomId);
-                jsonObject.put("message", text);
+                jsonObject.put("message", text.trim());
 
                 binding.tvSend.setText("Sending : "+text);
                 binding.tvSend.setVisibility(VISIBLE);
@@ -153,7 +159,7 @@ public class ChatActivity extends BaseActivity {
                     public void onSuccess(JSONObject result) {
                         Log.d("tustus", result.toString());
                         binding.tvSend.setVisibility(GONE);
-                        getMessages(roomId);
+                        getNewMessages(roomId, lastMessage);
 
                     }
                 });
@@ -163,7 +169,63 @@ public class ChatActivity extends BaseActivity {
         });
 
         binding.imgMore.setOnClickListener(v->{
-            getMessages(roomId);
+            getNewMessages(roomId, lastMessage);
         });
+    }
+
+    private Handler handler = new Handler();
+    private Runnable runnable;
+
+    private void startLooping() {
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (roomId != null) {
+                    getNewMessages(roomId, lastMessage); // call your method
+                }
+                handler.postDelayed(this, 3000); // repeat every 5 seconds
+            }
+        };
+        handler.post(runnable);
+    }
+
+    private void getNewMessages(String roomId, String lastUpdatedDate){
+
+        JSONArray jsonArray = new JSONArray();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("room_id", roomId);
+            jsonObject.put("last_updated", lastUpdatedDate);
+            jsonArray.put(jsonObject);
+
+            requestArray(true, CONSTANTS.appUrl + "chats/getMessagesNew.php", jsonArray, new ArrayListener() {
+                @Override
+                public void onSuccess(JSONArray result) {
+                    Log.d("tustusR", result.toString());
+                    Log.d("tustusR", lastMessage);
+
+                    chatAdapter.addData(result);
+                    lastMessage = getLastMessageTime(result,lastMessage ) ;
+
+                    binding.recyclerChat.scrollToPosition(chatAdapter.getItemCount() - 1);
+
+
+                }
+            });
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (handler != null && runnable != null) {
+            handler.removeCallbacks(runnable); // stop looping when activity is destroyed
+        }
     }
 }

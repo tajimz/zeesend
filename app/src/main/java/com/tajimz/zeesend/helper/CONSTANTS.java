@@ -13,4 +13,5 @@ public class CONSTANTS {
     public static String defaultBio = "Hello !";
     public static final String SHAREDPREF = "shared_pref_zee";
     public static final String id = "id";
+    public static final String sender_id = "sender_id";
 }
