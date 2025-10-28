@@ -24,7 +24,10 @@ import com.android.volley.toolbox.Volley;
 import com.tajimz.zeesend.R;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
 
 public class BaseFragment extends Fragment {
 
@@ -78,8 +81,20 @@ public class BaseFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                errorAlert("Server Error "+volleyError.toString());
                 endLoading();
+
+                if (volleyError.networkResponse != null) {
+                    int statusCode = volleyError.networkResponse.statusCode;
+                    String body = "";
+                    try {
+                        body = new String(volleyError.networkResponse.data, "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
+                    errorAlert("Server Error\nStatus Code: " + statusCode + "\nResponse: " + body);
+                } else {
+                    errorAlert("Server Error: " + volleyError.toString());
+                }
             }
         });
         requestQueue.add(jsonArrayRequest);
@@ -134,4 +149,23 @@ public class BaseFragment extends Fragment {
 
         return String.format("%010d", hash % 1_000_000_0000L);
     }
+
+    protected void putInJsonObj(JSONObject jsonObject, String key, Object value){
+        try {
+            jsonObject.put(key, value);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
+    protected String getStrFromJsonObj(JSONObject jsonObject, String key){
+
+        try {
+            return jsonObject.getString(key);
+        } catch (JSONException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

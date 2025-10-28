@@ -98,30 +98,28 @@ public class PeopleFragment extends BaseFragment {
     private void searchPeople(String text){
         JSONArray jsonArray = new JSONArray();
         JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put(CONSTANTS.username, getSharedPref(CONSTANTS.username));
-            jsonObject.put("searchTerm", text.trim());
-            jsonArray.put(jsonObject);
 
-            requestArray(true, CONSTANTS.appUrl + "others/search.php", jsonArray, new ArrayListener() {
-                @Override
-                public void onSuccess(JSONArray result) {
-                    Log.d("tustus", result.toString());
-                    handleRecycler(result);
+        putInJsonObj(jsonObject, CONSTANTS.username, getSharedPref(CONSTANTS.username));
+        putInJsonObj(jsonObject, "searchTerm", text.trim());
+        jsonArray.put(jsonObject);
 
-
-
-
-                }
-            });
+        requestArray(true, CONSTANTS.appUrl + "others/search.php", jsonArray, new ArrayListener() {
+            @Override
+            public void onSuccess(JSONArray result) {
+                Log.d("tustus", result.toString());
+                handleRecycler(result);
 
 
 
 
+            }
+        });
 
-        } catch (JSONException e) {
-            throw new RuntimeException(e);
-        }
+
+
+
+
+
 
 
     }
@@ -129,7 +127,7 @@ public class PeopleFragment extends BaseFragment {
     private void handleRecycler(JSONArray jsonArray){
         if (searchAdapter == null) {
             binding.recyclerPeople.setLayoutManager(new LinearLayoutManager(getContext()));
-            searchAdapter = new SearchAdapter(getContext(), jsonArray);
+            searchAdapter = new SearchAdapter(getContext(), jsonArray, false);
             binding.recyclerPeople.setAdapter(searchAdapter);
         } else {
             searchAdapter.updateData(jsonArray);

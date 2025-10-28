@@ -10,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
+import com.tajimz.zeesend.ChatActivity;
 import com.tajimz.zeesend.ContainerActivity;
 import com.tajimz.zeesend.databinding.LayoutRPeopleBinding;
 import com.tajimz.zeesend.helper.CONSTANTS;
@@ -22,10 +23,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     Context context;
     JSONArray jsonArray;
     JSONObject jsonObject;
+    Boolean directChat;
 
-    public SearchAdapter(Context context, JSONArray jsonArray){
+    public SearchAdapter(Context context, JSONArray jsonArray, Boolean directChat){
         this.context = context;
         this.jsonArray = jsonArray;
+        this.directChat = directChat;
 
 
     }
@@ -66,7 +69,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             Picasso.get().load(image).into(holder.binding.profileImage);
 
             holder.binding.main.setOnClickListener(v->{
-                Intent intent = new Intent(context, ContainerActivity.class);
+                Intent intent;
+                if (! directChat) intent = new Intent(context, ContainerActivity.class);
+                else intent = new Intent(context, ChatActivity.class);
                 intent.putExtra("status", "profile");
                 intent.putExtra(CONSTANTS.name, name);
                 intent.putExtra(CONSTANTS.username, username);
@@ -77,6 +82,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 context.startActivity(intent);
 
             });
+
+
 
 
 
