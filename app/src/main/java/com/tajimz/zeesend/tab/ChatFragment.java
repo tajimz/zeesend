@@ -6,8 +6,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 
 import com.tajimz.zeesend.R;
 import com.tajimz.zeesend.adapter.SearchAdapter;
@@ -29,6 +31,7 @@ public class ChatFragment extends BaseFragment {
 
         binding = FragmentChatBinding.inflate(inflater, container, false);
         getChatLists();
+        handleMenu(binding.imgMore);
 
         return binding.getRoot();
     }
@@ -61,5 +64,7 @@ public class ChatFragment extends BaseFragment {
         }
 
     }
+
+
 
 }

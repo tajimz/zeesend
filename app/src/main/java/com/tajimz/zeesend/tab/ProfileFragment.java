@@ -31,6 +31,7 @@ public class ProfileFragment extends BaseFragment {
 
         setupTextViews();
         setupClickListeners();
+        handleMenu(binding.imgMore);
 
 
         return binding.getRoot();

@@ -1,12 +1,16 @@
 package com.tajimz.zeesend.helper;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,6 +26,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.tajimz.zeesend.R;
+import com.tajimz.zeesend.SettingsActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -166,6 +171,33 @@ public class BaseFragment extends Fragment {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected void handleMenu(View view){
+        view.setOnClickListener(v->{
+            PopupMenu menu = new PopupMenu(getContext(), v);
+            menu.getMenuInflater().inflate(R.menu.three_dots, menu.getMenu());
+            menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    int id = item.getItemId();
+                    if (id == R.id.settings){
+
+                        startActivity(new Intent(getContext(), SettingsActivity.class));
+
+                    }else if (id == R.id.privacy_policy){
+                        openLink("https://google.com");
+                    }else if (id == R.id.about_us){
+                        toast("hi");
+                    }
+                    return false;
+                }
+            });
+            menu.show();
+        });
+    }
+    protected void openLink(String link){
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link)));
     }
 
 }
