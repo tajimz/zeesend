@@ -8,16 +8,23 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.button.MaterialButton;
 import com.squareup.picasso.Picasso;
 import com.tajimz.zeesend.ChatActivity;
 import com.tajimz.zeesend.R;
 import com.tajimz.zeesend.databinding.FragmentProfileBinding;
 import com.tajimz.zeesend.helper.BaseFragment;
 import com.tajimz.zeesend.helper.CONSTANTS;
+
+import org.json.JSONObject;
 
 
 public class ProfileFragment extends BaseFragment {
@@ -38,24 +45,14 @@ public class ProfileFragment extends BaseFragment {
     }
 
     private void setupTextViews(){
-        if (getArguments() != null) {
-            name = getArguments().getString(CONSTANTS.name);
-            username = getArguments().getString(CONSTANTS.username);
-            bio = getArguments().getString(CONSTANTS.bio);
-            email = getArguments().getString(CONSTANTS.email);
-            image = getArguments().getString(CONSTANTS.image);
-            id = getArguments().getString(CONSTANTS.id);
-            createTime = getArguments().getString(CONSTANTS.createTime);
-            binding.btnSend.setVisibility(VISIBLE);
-        } else {
-            name = getSharedPref(CONSTANTS.name);
-            username = getSharedPref(CONSTANTS.username);
-            bio = getSharedPref(CONSTANTS.bio);
-            email = getSharedPref(CONSTANTS.email);
-            image = getSharedPref(CONSTANTS.image);
-            createTime = getSharedPref(CONSTANTS.createTime);
-            binding.btnSend.setVisibility(GONE);
-        }
+        name = getValue(CONSTANTS.name);
+        username = getValue(CONSTANTS.username);
+        bio = getValue(CONSTANTS.bio);
+        email = getValue(CONSTANTS.email);
+        image = getValue(CONSTANTS.image);
+        id = getValue(CONSTANTS.id);
+        createTime = getValue(CONSTANTS.createTime);
+        handleCause();
 
         binding.tvName.setText(name);
         binding.tvUsername.setText(username);
@@ -78,5 +75,94 @@ public class ProfileFragment extends BaseFragment {
             intent.putExtra(CONSTANTS.createTime, createTime);
             startActivity(intent);
         });
+    }
+
+    private void handleEdit(){
+        binding.nameRl.setOnClickListener(v->{
+            editOption(CONSTANTS.name);
+
+        });
+        binding.aboutRl.setOnClickListener(v->{
+            editOption(CONSTANTS.bio);
+        });
+
+        binding.rlUsername.setOnClickListener(v->{
+            editOption(CONSTANTS.username);
+        });
+        binding.image.setOnClickListener(v->{
+
+        });
+    }
+
+
+    private void editOption(String why){
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
+        View sheetView = LayoutInflater.from(getContext()).inflate(R.layout.layout_edit, null);
+        bottomSheetDialog.setContentView(sheetView);
+
+        TextView tvTitle = sheetView.findViewById(R.id.tvEdit);
+        EditText editText = sheetView.findViewById(R.id.edEdit);
+        MaterialButton button = sheetView.findViewById(R.id.btnEdit);
+
+        tvTitle.setText("Change "+why+" :");
+        button.setOnClickListener(v->{
+            String text = editText.getText().toString().trim();
+            if (text.isEmpty()) return;
+
+            if (CONSTANTS.name.equals(why) && (text.length() < 3 || text.length() > 50)) return;
+            else if (CONSTANTS.bio.equals(why) && (text.length() < 5 || text.length() > 50)) return;
+            else if (CONSTANTS.username.equals(why) && (text.length() < 4 || text.length() > 16)) return;
+
+            editInfo(why, text);
+            bottomSheetDialog.dismiss();
+
+        });
+
+        bottomSheetDialog.show();
+
+
+
+
+
+    }
+    private void editInfo(String reason, String text){
+
+        JSONObject jsonObject = new JSONObject();
+        putInJsonObj(jsonObject, "reason", reason);
+        putInJsonObj(jsonObject, "text", text);
+        putInJsonObj(jsonObject, CONSTANTS.id, getSharedPref(CONSTANTS.id));
+        Log.d("tustus",jsonObject.toString());
+
+
+        requestObj(false, CONSTANTS.appUrl + "others/edit.php", jsonObject, new ObjListener() {
+            @Override
+            public void onSuccess(JSONObject result) {
+                String status = getStrFromJsonObj(result, "status");
+                if ("done".equals(status)) {
+                    editSharedPref(reason, text);
+                    toast("Successfully changed");
+                    setupTextViews();
+                }else {
+                    toast(status);
+                }
+
+            }
+        });
+
+
+    }
+
+    private String getValue(String key) {
+        if (getArguments() != null) return getArguments().getString(key);
+        return getSharedPref(key);
+    }
+
+    private void handleCause(){
+        if (getArguments() != null){
+            binding.btnSend.setVisibility(VISIBLE);
+        }else {
+            binding.btnSend.setVisibility(GONE);
+            handleEdit();
+        }
     }
 }
