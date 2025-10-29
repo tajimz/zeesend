@@ -63,6 +63,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             String bio = jsonObject.getString(CONSTANTS.bio);
             String image = jsonObject.getString(CONSTANTS.image);
             String id = jsonObject.getString(CONSTANTS.id);
+            String date = jsonObject.getString(CONSTANTS.createTime);
 
             holder.binding.tvName.setText(name);
             holder.binding.tvUsername.setText(username);
@@ -79,6 +80,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 intent.putExtra(CONSTANTS.bio, bio);
                 intent.putExtra(CONSTANTS.image, image);
                 intent.putExtra(CONSTANTS.id, id);
+                intent.putExtra(CONSTANTS.id, id);
+                intent.putExtra(CONSTANTS.createTime, date);
                 context.startActivity(intent);
 
             });

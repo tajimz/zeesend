@@ -96,7 +96,7 @@ public class SignupActivity extends BaseActivity {
                     String status = getStrFromJsonObj(result ,"status");
                     if ("done".equals(status)) {
                         String id = getStrFromJsonObj(result, CONSTANTS.id);
-                        doneSignup(name, email, username, id);
+                        doneSignup(name, email, username, id, getCurrentDate());
                     }
                     else {
                         toast(status);
@@ -211,7 +211,7 @@ public class SignupActivity extends BaseActivity {
     }
 
 
-    private void doneSignup(String name, String email, String username, String id){
+    private void doneSignup(String name, String email, String username, String id, String date){
         String bio = CONSTANTS.defaultBio;
         String image = CONSTANTS.defaultImage;
 
@@ -221,6 +221,7 @@ public class SignupActivity extends BaseActivity {
         editSharedPref(CONSTANTS.email, email);
         editSharedPref(CONSTANTS.username, username);
         editSharedPref(CONSTANTS.id, id);
+        editSharedPref(CONSTANTS.createTime, date);
 
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

@@ -23,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -185,6 +186,26 @@ public class BaseActivity extends AppCompatActivity {
         } catch (JSONException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected String cleanDate(String date) {
+        // Input format
+        SimpleDateFormat inputFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        // Output format
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd MMM, yyyy", Locale.getDefault());
+
+        try {
+            Date parsedDate = inputFormat.parse(date);
+            return outputFormat.format(parsedDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return date; // fallback to original if parsing fails
+        }
+    }
+
+    protected String getCurrentDate() {
+        SimpleDateFormat outputFormat = new SimpleDateFormat("dd MMM, yyyy", Locale.getDefault());
+        return outputFormat.format(new Date());
     }
 
 

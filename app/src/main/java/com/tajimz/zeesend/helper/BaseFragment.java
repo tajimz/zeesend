@@ -27,6 +27,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.tajimz.zeesend.R;
 import com.tajimz.zeesend.SettingsActivity;
+import com.tajimz.zeesend.SplashActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -189,6 +190,11 @@ public class BaseFragment extends Fragment {
                         openLink("https://google.com");
                     }else if (id == R.id.about_us){
                         toast("hi");
+                    }else if (id == R.id.log_out){
+                        editSharedPref(CONSTANTS.name, null);
+                        Intent intent = new Intent(getContext(), SplashActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
                     }
                     return false;
                 }

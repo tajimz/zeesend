@@ -22,7 +22,7 @@ import com.tajimz.zeesend.helper.CONSTANTS;
 
 public class ProfileFragment extends BaseFragment {
     FragmentProfileBinding binding;
-    private String name, username, bio, email, image, id;
+    private String name, username, bio, email, image, id, createTime;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,6 +45,7 @@ public class ProfileFragment extends BaseFragment {
             email = getArguments().getString(CONSTANTS.email);
             image = getArguments().getString(CONSTANTS.image);
             id = getArguments().getString(CONSTANTS.id);
+            createTime = getArguments().getString(CONSTANTS.createTime);
             binding.btnSend.setVisibility(VISIBLE);
         } else {
             name = getSharedPref(CONSTANTS.name);
@@ -52,6 +53,7 @@ public class ProfileFragment extends BaseFragment {
             bio = getSharedPref(CONSTANTS.bio);
             email = getSharedPref(CONSTANTS.email);
             image = getSharedPref(CONSTANTS.image);
+            createTime = getSharedPref(CONSTANTS.createTime);
             binding.btnSend.setVisibility(GONE);
         }
 
@@ -59,6 +61,7 @@ public class ProfileFragment extends BaseFragment {
         binding.tvUsername.setText(username);
         binding.tvBio.setText(bio);
         binding.tvEmail.setText(email);
+        binding.tvDate.setText(createTime);
         Picasso.get().load(image).into(binding.image);
 
     }
@@ -68,7 +71,11 @@ public class ProfileFragment extends BaseFragment {
             Intent intent = new Intent(getContext(), ChatActivity.class);
             intent.putExtra(CONSTANTS.name, name);
             intent.putExtra(CONSTANTS.id, id);
+            intent.putExtra(CONSTANTS.username, username);
+            intent.putExtra(CONSTANTS.bio, bio);
+            intent.putExtra(CONSTANTS.email, email);
             intent.putExtra(CONSTANTS.image, image);
+            intent.putExtra(CONSTANTS.createTime, createTime);
             startActivity(intent);
         });
     }

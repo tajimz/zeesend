@@ -3,9 +3,12 @@ package com.tajimz.zeesend;
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.MenuItem;
+import android.widget.PopupMenu;
 
 import androidx.activity.EdgeToEdge;
 import androidx.core.graphics.Insets;
@@ -23,7 +26,7 @@ import org.json.JSONObject;
 
 public class ChatActivity extends BaseActivity {
     ActivityChatBinding binding;
-    String id, name, image, currentUserId, roomId;
+    String id, name, image, currentUserId, roomId, bio, username, date, email;
     ChatAdapter chatAdapter;
     String lastMessage ;
 
@@ -38,6 +41,9 @@ public class ChatActivity extends BaseActivity {
         findRoom();
         handleSend();
         startLooping();
+        handleClicks();
+        handleMenu();
+
 
 
 
@@ -58,6 +64,10 @@ public class ChatActivity extends BaseActivity {
         id = getIntent().getStringExtra(CONSTANTS.id);
         name = getIntent().getStringExtra(CONSTANTS.name);
         image = getIntent().getStringExtra(CONSTANTS.image);
+        bio = getIntent().getStringExtra(CONSTANTS.bio);
+        username = getIntent().getStringExtra(CONSTANTS.username);
+        date = getIntent().getStringExtra(CONSTANTS.createTime);
+        email = getIntent().getStringExtra(CONSTANTS.email);
 
         binding.tvName.setText(name);
         Picasso.get().load(image).into(binding.imgProfile);
@@ -181,6 +191,49 @@ public class ChatActivity extends BaseActivity {
             }
         };
         handler.post(runnable);
+    }
+
+    private void handleClicks(){
+        binding.imgBack.setOnClickListener(v->{
+            super.onBackPressed();
+        });
+    }
+
+    private void handleMenu(){
+        binding.imgMore.setOnClickListener(v->{
+            PopupMenu menu = new PopupMenu(this, v);
+            menu.getMenuInflater().inflate(R.menu.three_dots_chat, menu.getMenu());
+            menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    int id = item.getItemId();
+                    if (id == R.id.delete_chat){
+                        toast("Coming soon ...");
+                    }else if (id == R.id.block_usr){
+                        toast("Coming soon ...");
+                    }
+                    return false;
+                }
+            });
+            menu.show();
+        });
+
+
+
+        binding.tvName.setOnClickListener(v->{
+            Intent intent = new Intent(this, ContainerActivity.class);
+            intent.putExtra("status", "profile");
+            intent.putExtra(CONSTANTS.name, name);
+            intent.putExtra(CONSTANTS.username, username);
+            intent.putExtra(CONSTANTS.email, email);
+            intent.putExtra(CONSTANTS.bio, bio);
+            intent.putExtra(CONSTANTS.image, image);
+            intent.putExtra(CONSTANTS.id, id);
+            intent.putExtra(CONSTANTS.id, id);
+            intent.putExtra(CONSTANTS.createTime, date);
+            startActivity(intent);
+            finish();
+        });
     }
 
 

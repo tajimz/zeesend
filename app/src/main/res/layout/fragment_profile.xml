@@ -190,6 +190,42 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/rl5"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/rl4"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+
+        >
+        <ImageView
+            android:id="@+id/img5"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/baseline_sign"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"/>
+        <TextView
+            android:id="@+id/tv5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Since"
+            android:layout_toRightOf="@id/img5"
+            android:textSize="17dp"/>
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="18 August, 2025"
+            android:layout_toRightOf="@id/img5"
+            android:layout_below="@id/tv5"
+            android:textSize="15sp"/>
+
+
+    </RelativeLayout>
+
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSend"

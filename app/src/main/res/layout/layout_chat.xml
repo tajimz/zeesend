@@ -5,21 +5,49 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="10dp">
 
-    <TextView
-        android:id="@+id/tvHe"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
+    <androidx.cardview.widget.CardView
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <TextView
-        android:id="@+id/tvMe"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
+        app:cardCornerRadius="5dp"
+        >
+        <TextView
+            android:id="@+id/tvHe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hello"
+            android:padding="10dp"
+            android:background="@color/blackLight"
+            android:textColor="@color/white"
+
+            />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="5dp"
+        >
+        <TextView
+            android:id="@+id/tvMe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hello"
+            android:padding="10dp"
+            android:background="@color/themePrimary"
+            android:textColor="@color/white"
+
+            />
+
+    </androidx.cardview.widget.CardView>
+
+
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

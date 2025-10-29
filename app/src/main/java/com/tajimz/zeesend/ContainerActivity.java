@@ -9,10 +9,11 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.tajimz.zeesend.databinding.ActivityContainerBinding;
+import com.tajimz.zeesend.helper.BaseActivity;
 import com.tajimz.zeesend.helper.CONSTANTS;
 import com.tajimz.zeesend.tab.ProfileFragment;
 
-public class ContainerActivity extends AppCompatActivity {
+public class ContainerActivity extends BaseActivity {
     ActivityContainerBinding binding;
 
     @Override
@@ -43,6 +44,7 @@ public class ContainerActivity extends AppCompatActivity {
         bundle.putString(CONSTANTS.image, getIntent().getStringExtra(CONSTANTS.image));
         bundle.putString(CONSTANTS.username, getIntent().getStringExtra(CONSTANTS.username));
         bundle.putString(CONSTANTS.id, getIntent().getStringExtra(CONSTANTS.id));
+        bundle.putString(CONSTANTS.createTime, cleanDate(getIntent().getStringExtra(CONSTANTS.createTime)));
 
         ProfileFragment profileFragment = new ProfileFragment();
         profileFragment.setArguments(bundle);

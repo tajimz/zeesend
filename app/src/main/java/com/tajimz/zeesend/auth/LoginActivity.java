@@ -125,8 +125,9 @@ public class LoginActivity extends BaseActivity {
                 String bio = getStrFromJsonObj(result, CONSTANTS.bio);
                 String image = getStrFromJsonObj(result, CONSTANTS.image);
                 String id = getStrFromJsonObj(result, CONSTANTS.id);
+                String date = getStrFromJsonObj(result, CONSTANTS.createTime);
 
-                doneLogin(name, email, username, bio, image, id);
+                doneLogin(name, email, username, bio, image, id, date);
 
             }
         });
@@ -148,13 +149,14 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    private void doneLogin(String name, String email, String username , String bio, String image, String id){
+    private void doneLogin(String name, String email, String username , String bio, String image, String id, String date){
 
         editSharedPref(CONSTANTS.bio, bio);
         editSharedPref(CONSTANTS.image, image);
         editSharedPref(CONSTANTS.name, name);
         editSharedPref(CONSTANTS.email, email);
         editSharedPref(CONSTANTS.username, username);
+        editSharedPref(CONSTANTS.createTime, cleanDate(date));
         editSharedPref(CONSTANTS.id, id);
 
         Intent intent = new Intent(this, MainActivity.class);
