@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.squareup.picasso.Picasso;
 import com.tajimz.zeesend.ChatActivity;
 import com.tajimz.zeesend.ContainerActivity;
+import com.tajimz.zeesend.R;
 import com.tajimz.zeesend.databinding.LayoutRPeopleBinding;
 import com.tajimz.zeesend.helper.CONSTANTS;
 
@@ -67,7 +68,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
             holder.binding.tvName.setText(name);
             holder.binding.tvUsername.setText(username);
-            Picasso.get().load(image).into(holder.binding.profileImage);
+            Picasso.get().load(image).placeholder(R.drawable.bydefault).into(holder.binding.profileImage);
 
             holder.binding.main.setOnClickListener(v->{
                 Intent intent;

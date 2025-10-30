@@ -9,6 +9,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.tajimz.zeesend.MainActivity;
@@ -44,7 +45,8 @@ public class SignupActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ActivitySignupBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setupEdge();
+        setupEdgeToEdge();
+        setupEssentials();
         handleCreate();
         handleGoogle();
         handleLinks();
@@ -55,13 +57,7 @@ public class SignupActivity extends BaseActivity {
 
 
     }
-    private void setupEdge(){
-        EdgeToEdge.enable(this);
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+    private void setupEssentials(){
         firebaseAuth = FirebaseAuth.getInstance();
         credentialManager = CredentialManager.create(this);
         googleOption = new GetSignInWithGoogleOption.Builder(getString(R.string.googleId)).build();

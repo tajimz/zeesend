@@ -5,10 +5,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -17,6 +23,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 import com.tajimz.zeesend.R;
 
 import org.json.JSONArray;
@@ -206,6 +213,20 @@ public class BaseActivity extends AppCompatActivity {
     protected String getCurrentDate() {
         SimpleDateFormat outputFormat = new SimpleDateFormat("dd MMM, yyyy", Locale.getDefault());
         return outputFormat.format(new Date());
+    }
+
+    protected void setupEdgeToEdge(){
+        EdgeToEdge.enable(this);
+        WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView()).setAppearanceLightStatusBars(true);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+    }
+
+    protected void loadImage(String url, ImageView imageView){
+        Picasso.get().load(url).placeholder(R.drawable.bydefault).into(imageView);
     }
 
 

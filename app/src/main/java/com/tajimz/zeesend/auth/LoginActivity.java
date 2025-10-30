@@ -38,7 +38,8 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setupEdge();
+        setupEdgeToEdge();
+        setupEssentials();
         handleLinks();
         handleGoogle();
         handleManual();
@@ -46,21 +47,11 @@ public class LoginActivity extends BaseActivity {
 
     }
 
-    private void setupEdge(){
-        EdgeToEdge.enable(this);
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
+    private void setupEssentials(){
         firebaseAuth = FirebaseAuth.getInstance();
         credentialManager = CredentialManager.create(this);
         googleOption = new GetSignInWithGoogleOption.Builder(getString(R.string.googleId)).build();
         getCredentialRequest = new GetCredentialRequest.Builder().addCredentialOption(googleOption).build();
-
-
-
 
     }
 

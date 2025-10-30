@@ -25,24 +25,13 @@ public class SplashActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setupEdge();
+        setupEdgeToEdge();
         new Handler(Looper.getMainLooper()).postDelayed(this::navigateNext, 2000);
 
 
 
     }
-    private void setupEdge(){
-        EdgeToEdge.enable(this);
-        ViewCompat.setOnApplyWindowInsetsListener(binding.main, (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
-
-
-
-    }
 
     private void navigateNext(){
         String name = getSharedPref(CONSTANTS.name);

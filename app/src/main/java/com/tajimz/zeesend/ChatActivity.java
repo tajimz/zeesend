@@ -2,20 +2,13 @@ package com.tajimz.zeesend;
 
 import static android.view.View.GONE;
 import static android.view.View.VISIBLE;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.PopupMenu;
-
-import androidx.activity.EdgeToEdge;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
-
 import com.squareup.picasso.Picasso;
 import com.tajimz.zeesend.adapter.ChatAdapter;
 import com.tajimz.zeesend.databinding.ActivityChatBinding;
@@ -36,7 +29,7 @@ public class ChatActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        setupEdge();
+        setupEdgeToEdge();
         setupTexts();
         findRoom();
         handleSend();
@@ -49,16 +42,7 @@ public class ChatActivity extends BaseActivity {
 
     }
 
-    private void setupEdge(){
-        EdgeToEdge.enable(this);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-        binding.tvSend.setVisibility(GONE);
 
-    }
 
     private void setupTexts(){
         id = getIntent().getStringExtra(CONSTANTS.id);
@@ -70,7 +54,7 @@ public class ChatActivity extends BaseActivity {
         email = getIntent().getStringExtra(CONSTANTS.email);
 
         binding.tvName.setText(name);
-        Picasso.get().load(image).into(binding.imgProfile);
+        loadImage(image, binding.imgProfile);
     }
 
     private void findRoom(){

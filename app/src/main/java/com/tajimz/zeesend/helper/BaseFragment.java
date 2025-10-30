@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.squareup.picasso.Picasso;
 import com.tajimz.zeesend.R;
 import com.tajimz.zeesend.SettingsActivity;
 import com.tajimz.zeesend.SplashActivity;
@@ -204,6 +206,10 @@ public class BaseFragment extends Fragment {
     }
     protected void openLink(String link){
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link)));
+    }
+
+    protected void loadImage(String url, ImageView imageView){
+        Picasso.get().load(url).placeholder(R.drawable.bydefault).into(imageView);
     }
 
 }

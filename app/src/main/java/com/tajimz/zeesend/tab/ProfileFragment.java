@@ -59,7 +59,7 @@ public class ProfileFragment extends BaseFragment {
         binding.tvBio.setText(bio);
         binding.tvEmail.setText(email);
         binding.tvDate.setText(createTime);
-        Picasso.get().load(image).into(binding.image);
+        loadImage(image, binding.image);
 
     }
 

@@ -120,7 +120,8 @@
         android:gravity="center"
         app:layout_constraintTop_toBottomOf="@id/const_Tool"
         android:maxLines="1"
-        android:ellipsize="end"/>
+        android:ellipsize="end"
+        android:visibility="gone"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerChat"
