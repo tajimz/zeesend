@@ -1,5 +1,6 @@
 package com.tajimz.zeesend.tab;
 
+import static android.view.View.GONE;
 import static android.view.View.INVISIBLE;
 import static android.view.View.VISIBLE;
 
@@ -107,7 +108,7 @@ public class PeopleFragment extends BaseFragment {
             @Override
             public void onSuccess(JSONArray result) {
                 Log.d("tustus", result.toString());
-                handleRecycler(result);
+                handleRecycler(result, false);
 
 
 
@@ -124,16 +125,40 @@ public class PeopleFragment extends BaseFragment {
 
     }
 
-    private void handleRecycler(JSONArray jsonArray){
+    private void handleRecycler(JSONArray jsonArray, Boolean skipInvisible){
         if (searchAdapter == null) {
             binding.recyclerPeople.setLayoutManager(new LinearLayoutManager(getContext()));
             searchAdapter = new SearchAdapter(getContext(), jsonArray, false);
             binding.recyclerPeople.setAdapter(searchAdapter);
         } else {
+            if (!skipInvisible) binding.tvKnow.setVisibility(GONE);
             searchAdapter.updateData(jsonArray);
         }
 
     }
 
 
+    private void handleRandom (){
+        JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+        putInJsonObj(jsonObject, CONSTANTS.id, getSharedPref(CONSTANTS.id));
+        jsonArray.put(jsonObject);
+
+        requestArray(true, CONSTANTS.appUrl + "others/getSuggestion.php", jsonArray, new ArrayListener() {
+            @Override
+            public void onSuccess(JSONArray result) {
+                Log.d("tustusR", result.toString());
+                handleRecycler(result, true);
+            }
+        });
+
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        handleRandom();
+        binding.tvKnow.setVisibility(VISIBLE);
+    }
 }
