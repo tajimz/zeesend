@@ -4,6 +4,7 @@ import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -32,6 +33,7 @@ public class ChatFragment extends BaseFragment {
         binding = FragmentChatBinding.inflate(inflater, container, false);
         getChatLists();
         handleMenu(binding.imgMore);
+        startLooping();
 
         return binding.getRoot();
     }
@@ -47,7 +49,9 @@ public class ChatFragment extends BaseFragment {
         requestArray(true, CONSTANTS.appUrl + "chats/getLists.php", jsonArray, new ArrayListener() {
             @Override
             public void onSuccess(JSONArray result) {
+                Log.d("tustusRR", result.toString());
                 handleRecycler(result, true);
+
 
 
             }
@@ -63,6 +67,22 @@ public class ChatFragment extends BaseFragment {
             searchAdapter.updateData(jsonArray);
         }
 
+    }
+
+    private Handler handler = new Handler();
+    private Runnable runnable;
+
+    private void startLooping() {
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (searchAdapter != null) {
+                    getChatLists(); // call your method
+                }
+                handler.postDelayed(this, 2000); // repeat every 5 seconds
+            }
+        };
+        handler.post(runnable);
     }
 
 

@@ -67,7 +67,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             String date = jsonObject.getString(CONSTANTS.createTime);
 
             holder.binding.tvName.setText(name);
-            holder.binding.tvUsername.setText(username);
+            if (directChat){
+                String lastMessage = jsonObject.getString("last_message");
+                holder.binding.tvUsername.setText(lastMessage);
+            }else {
+                holder.binding.tvUsername.setText(username);
+            }
             Picasso.get().load(image).placeholder(R.drawable.bydefault).into(holder.binding.profileImage);
 
             holder.binding.main.setOnClickListener(v->{

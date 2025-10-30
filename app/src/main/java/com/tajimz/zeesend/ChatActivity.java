@@ -171,7 +171,7 @@ public class ChatActivity extends BaseActivity {
                 if (roomId != null) {
                     getMessagesAll(true, roomId); // call your method
                 }
-                handler.postDelayed(this, 3000); // repeat every 5 seconds
+                handler.postDelayed(this, 2000); // repeat every 5 seconds
             }
         };
         handler.post(runnable);
