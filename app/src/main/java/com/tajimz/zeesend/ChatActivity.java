@@ -19,7 +19,7 @@ import org.json.JSONObject;
 
 public class ChatActivity extends BaseActivity {
     ActivityChatBinding binding;
-    String id, name, image, currentUserId, roomId, bio, username, date, email;
+    String id, name, image, currentUserId, roomId, bio, username, date, email, fcm;
     ChatAdapter chatAdapter;
     String lastMessage ;
 
@@ -52,6 +52,7 @@ public class ChatActivity extends BaseActivity {
         username = getIntent().getStringExtra(CONSTANTS.username);
         date = getIntent().getStringExtra(CONSTANTS.createTime);
         email = getIntent().getStringExtra(CONSTANTS.email);
+        fcm = getIntent().getStringExtra("fcm");
 
         binding.tvName.setText(name);
         loadImage(image, binding.imgProfile);
@@ -109,6 +110,8 @@ public class ChatActivity extends BaseActivity {
             putInJsonObj(jsonObject, "sender_id", currentUserId);
             putInJsonObj(jsonObject, "room_id", roomId);
             putInJsonObj(jsonObject, "message", text.trim());
+            putInJsonObj(jsonObject, "name", name);
+            putInJsonObj(jsonObject, "fcm", fcm);
 
             binding.tvSend.setText("Sending : "+text);
             binding.tvSend.setVisibility(VISIBLE);

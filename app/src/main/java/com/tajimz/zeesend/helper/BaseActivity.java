@@ -3,12 +3,14 @@ package com.tajimz.zeesend.helper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -23,6 +25,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.squareup.picasso.Picasso;
 import com.tajimz.zeesend.R;
 
@@ -228,6 +233,52 @@ public class BaseActivity extends AppCompatActivity {
     protected void loadImage(String url, ImageView imageView){
         Picasso.get().load(url).placeholder(R.drawable.bydefault).into(imageView);
     }
+
+    public static void sendToServer(Context context){
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                String token = task.getResult();
+
+                SharedPreferences sharedPreferences = context.getSharedPreferences(CONSTANTS.SHAREDPREF, MODE_PRIVATE);
+                String id = sharedPreferences.getString(CONSTANTS.id, null);
+                if (id == null) return;
+                RequestQueue requestQueue = Volley.newRequestQueue(context);
+                JSONObject jsonObject = new JSONObject();
+                try {
+                    jsonObject.put("text", token);
+                    jsonObject.put("reason", "fcm");
+                    jsonObject.put(CONSTANTS.id, id);
+                    Log.d("tustus", jsonObject.toString());
+
+                    JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, CONSTANTS.appUrl+"others/edit.php", jsonObject, new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject jsonObject) {
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("fcm", token);
+                            editor.apply();
+                            Log.d("tustus", jsonObject.toString());
+
+                        }
+                    }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError volleyError) {
+                            Log.d("tustus", volleyError.toString());
+                        }
+                    });
+                    requestQueue.add(jsonObjectRequest);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+
+
+
+            }
+        });
+
+    }
+
+
 
 
 

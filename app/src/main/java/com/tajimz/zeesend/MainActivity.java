@@ -1,8 +1,20 @@
 package com.tajimz.zeesend;
 
 
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
+
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.tajimz.zeesend.databinding.ActivityMainBinding;
 import com.tajimz.zeesend.helper.BaseActivity;
 import com.tajimz.zeesend.helper.ViewPagerII;
@@ -18,11 +30,12 @@ public class MainActivity extends BaseActivity {
         setContentView(binding.getRoot());
         setupEdgeToEdge();
         setupTabs();
+        askNotificationPermission();
 
     }
 
 
-    private void setupTabs(){
+    private void setupTabs() {
         viewPagerII = new ViewPagerII(this);
         binding.pager2.setAdapter(viewPagerII);
         binding.tabLay.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -52,4 +65,25 @@ public class MainActivity extends BaseActivity {
         });
 
     }
+
+    private final ActivityResultLauncher<String> requestPermissionLauncher =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+                if (isGranted) {
+
+                } else {
+
+                }
+            });
+
+    private void askNotificationPermission() {
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return;
+
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) !=
+                    PackageManager.PERMISSION_GRANTED) {
+            requestPermissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS);
+        }
+
+    }
+
 }

@@ -65,6 +65,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             String image = jsonObject.getString(CONSTANTS.image);
             String id = jsonObject.getString(CONSTANTS.id);
             String date = jsonObject.getString(CONSTANTS.createTime);
+            String fcm = jsonObject.getString("fcm");
 
             holder.binding.tvName.setText(name);
             if (directChat){
@@ -88,6 +89,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                 intent.putExtra(CONSTANTS.id, id);
                 intent.putExtra(CONSTANTS.id, id);
                 intent.putExtra(CONSTANTS.createTime, date);
+                intent.putExtra("fcm", fcm);
                 context.startActivity(intent);
 
             });

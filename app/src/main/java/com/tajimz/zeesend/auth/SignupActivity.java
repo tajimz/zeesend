@@ -223,6 +223,8 @@ public class SignupActivity extends BaseActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
 
+        sendToServer(this);
+
 
 
 

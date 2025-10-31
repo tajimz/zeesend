@@ -30,6 +30,7 @@ public class ContainerActivity extends BaseActivity {
         bundle.putString(CONSTANTS.image, getIntent().getStringExtra(CONSTANTS.image));
         bundle.putString(CONSTANTS.username, getIntent().getStringExtra(CONSTANTS.username));
         bundle.putString(CONSTANTS.id, getIntent().getStringExtra(CONSTANTS.id));
+        bundle.putString("fcm", getIntent().getStringExtra("fcm"));
         bundle.putString(CONSTANTS.createTime, cleanDate(getIntent().getStringExtra(CONSTANTS.createTime)));
 
         ProfileFragment profileFragment = new ProfileFragment();

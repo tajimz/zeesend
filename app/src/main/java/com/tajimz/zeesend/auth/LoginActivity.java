@@ -155,6 +155,11 @@ public class LoginActivity extends BaseActivity {
         startActivity(intent);
 
 
+        sendToServer(this);
+
+
+
+
 
 
 

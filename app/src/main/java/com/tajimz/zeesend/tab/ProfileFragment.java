@@ -29,7 +29,7 @@ import org.json.JSONObject;
 
 public class ProfileFragment extends BaseFragment {
     FragmentProfileBinding binding;
-    private String name, username, bio, email, image, id, createTime;
+    private String name, username, bio, email, image, id, createTime , fcm;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,6 +52,7 @@ public class ProfileFragment extends BaseFragment {
         image = getValue(CONSTANTS.image);
         id = getValue(CONSTANTS.id);
         createTime = getValue(CONSTANTS.createTime);
+        fcm = getValue("fcm");
         handleCause();
 
         binding.tvName.setText(name);
@@ -73,6 +74,7 @@ public class ProfileFragment extends BaseFragment {
             intent.putExtra(CONSTANTS.email, email);
             intent.putExtra(CONSTANTS.image, image);
             intent.putExtra(CONSTANTS.createTime, createTime);
+            intent.putExtra("fcm", fcm);
             startActivity(intent);
         });
     }
