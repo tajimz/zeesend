@@ -233,6 +233,7 @@ public class ChatActivity extends BaseActivity {
         requestObj(true, CONSTANTS.appUrl + "notification/sendNotification.php", jsonObject, new ObjListener() {
             @Override
             public void onSuccess(JSONObject result) {
+                Log.d("result", result.toString());
 
             }
         });
