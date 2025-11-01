@@ -123,6 +123,7 @@ public class ChatActivity extends BaseActivity {
                     Log.d("tustus", result.toString());
                     binding.tvSend.setVisibility(GONE);
                     getMessagesAll(true, roomId);
+                    sendNotification(name,text.trim(),  fcm);
 
                 }
             });
@@ -220,6 +221,20 @@ public class ChatActivity extends BaseActivity {
             intent.putExtra(CONSTANTS.createTime, date);
             startActivity(intent);
             finish();
+        });
+    }
+
+    private void sendNotification(String name, String body, String fcm){
+        JSONObject jsonObject = new JSONObject();
+        putInJsonObj(jsonObject, "title", name);
+        putInJsonObj(jsonObject, "body", body);
+        putInJsonObj(jsonObject, "token", fcm);
+
+        requestObj(true, CONSTANTS.appUrl + "notification/sendNotification.php", jsonObject, new ObjListener() {
+            @Override
+            public void onSuccess(JSONObject result) {
+
+            }
         });
     }
 
